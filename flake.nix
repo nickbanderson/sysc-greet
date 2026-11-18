@@ -161,7 +161,7 @@ EOF
         with lib;
         let
           cfg = config.services.sysc-greet;
-          package = mkPackage pkgs;
+          package = cfg.package;
           defaultGslapperPackage = gslapper.packages.${pkgs.stdenv.hostPlatform.system}.default;
           compositorPackage =
             if cfg.compositor == "niri" then cfg.niriPackage
@@ -186,6 +186,12 @@ EOF
         {
           options.services.sysc-greet = {
             enable = mkEnableOption "sysc-greet greeter for greetd";
+
+            package = mkOption {
+              type = types.package;
+              default = mkPackage pkgs;
+              description = "The sysc-greet package to use.";
+            };
 
             compositor = mkOption {
               type = types.enum [ "niri" "hyprland" "sway" "cagebreak" "mango" ];
